@@ -22,6 +22,8 @@ namespace photography_be
 
         public IConfiguration Configuration { get; }
 
+        readonly string MyAllowSpecificOrigins = "_MyAllowSpecificOrigins";
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -30,6 +32,16 @@ namespace photography_be
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:8080",
+                                            "https://localhost:8080");
+                    });
             });
 
 
@@ -55,6 +67,7 @@ namespace photography_be
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseMvc(routes =>
             {
