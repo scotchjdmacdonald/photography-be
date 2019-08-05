@@ -3,6 +3,10 @@ mono: none
 dotnet: 2.1.502
 script:
  - dotnet clean
- - dontet restore
+ - dotnet restore
  - dotnet publish
- 
+
+deploy:
+  provider: azure_web_apps
+  skip_clean: true
+  verbose: true
